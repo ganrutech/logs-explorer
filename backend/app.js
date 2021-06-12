@@ -9,13 +9,15 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+db.Promise = global.Promise;
+
 db.connect(
   `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@mongodb:${process.env.MONGO_PORT}/logs_db?authSource=admin`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000,
-    uri_decode_auth: true,
+    useCreateIndex: true,
   }
 )
   .then(() => {

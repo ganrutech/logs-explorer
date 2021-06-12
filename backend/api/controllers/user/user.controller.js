@@ -1,39 +1,27 @@
 const User = require("../../models/user/user.model");
+const {
+  commonFilter,
+  commonSave,
+  commonFindByID,
+  commonDeleteByID,
+} = require("../../helpers/query.helper");
 
 // Get all users
-exports.getAllUsers = async (req, res, next) => {
-  try {
-    const users = await User.find();
+exports.getAllUsers = (req, res, next) => {
+  commonFilter(req, res, next, User);
+};
 
-    res.status(200).json({
-      status: "success",
-      results: users.length,
-      data: users,
-    });
-  } catch (err) {
-    next(new Error(err.message));
-  }
+// Get one user
+exports.getUser = (req, res, next) => {
+  commonFindByID(req, res, next, User);
 };
 
 // Create new user
-exports.createUser = async (req, res, next) => {
-  try {
-    const users = new User(req.body);
-    await users.save();
+exports.createUser = (req, res, next) => {
+  commonSave(req, res, next, User);
+};
 
-    res.status(200).json({
-      status: "success",
-      data: users,
-    });
-  } catch (e) {
-    if (e.name === "ValidationError") {
-      const err = new Error("Validation Error");
-      err.name = e.name;
-      err.status = 422;
-      err.validate = e.errors;
-      next(err);
-    } else {
-      next(new Error(error.message));
-    }
-  }
+// Delete user
+exports.deleteUser = (req, res, next) => {
+  commonDeleteByID(req, res, next, User);
 };
