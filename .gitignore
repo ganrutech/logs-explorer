@@ -1,0 +1,8 @@
+**/node_modules
+**/env
+
+# Production
+**/build
+**npm-debug.log*
+**.env*
+package-lock*

@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  mongodb:
+    volumes:
+      - database-logs-prod:/data/db
+    env_file:
+      - ./env/mongo.env
+
+  logs-backend:
+    build:
+      context: ./backend
+      dockerfile: ../dockerfiles/backend.dockerfile
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ./env/service.env
+    command: node app.js
+
+volumes:
+  database-logs-prod:

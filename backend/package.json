@@ -1,0 +1,20 @@
+{
+  "name": "log-explorer",
+  "version": "1.0.0",
+  "description": "Log Explorer developed by Ganru Technologies",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "author": "Guruprakash Narendran",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.13"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
