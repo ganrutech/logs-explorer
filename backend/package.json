@@ -10,9 +10,14 @@
   "author": "Guruprakash Narendran",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "mongoose": "^5.12.13"
+    "mongodb": "^3.6.9",
+    "mongoose": "^5.12.13",
+    "socket.io": "^4.1.2",
+    "winston": "^3.3.3",
+    "winston-mongodb": "^5.0.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

@@ -4,6 +4,7 @@ const {
   commonSave,
   commonFindByID,
   commonDeleteByID,
+  commonUpdate,
 } = require("../../helpers/query.helper");
 
 // Get all users
@@ -19,6 +20,11 @@ exports.getUser = (req, res, next) => {
 // Create new user
 exports.createUser = (req, res, next) => {
   commonSave(req, res, next, User);
+};
+
+// Update user
+exports.updateUser = (req, res, next) => {
+  commonUpdate(req, res, next, User);
 };
 
 // Delete user

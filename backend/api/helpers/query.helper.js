@@ -91,7 +91,11 @@ exports.commonSave = async (req, res, next, Model) => {
       err.validate = e.errors;
       next(err);
     } else {
-      next(new Error(e.message));
+      const err = new Error(e.message);
+      if (e.status) {
+        err.status = e.status;
+      }
+      next(err);
     }
   }
 };
@@ -99,7 +103,7 @@ exports.commonSave = async (req, res, next, Model) => {
 // Delete by ID
 exports.commonDeleteByID = async (req, res, next, Model) => {
   try {
-    const data = Model.findByIdAndDelete(req.params.id, function (err, doc) {
+    await Model.findByIdAndDelete(req.params.id, function (err, doc) {
       if (err) {
         next(new Error(err.message));
       }
@@ -117,5 +121,40 @@ exports.commonDeleteByID = async (req, res, next, Model) => {
     });
   } catch (e) {
     next(new Error(e.message));
+  }
+};
+
+// Update by ID
+
+exports.commonUpdate = async (req, res, next, Model) => {
+  try {
+    const data = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (data) {
+      res.status(200).json({
+        status: "success",
+        data: data,
+      });
+    } else {
+      res.status(404).json({
+        data: "Not found",
+      });
+    }
+  } catch (e) {
+    if (e.name === "ValidationError") {
+      const err = new Error("Validation Error");
+      err.name = e.name;
+      err.status = 422;
+      err.validate = e.errors;
+      next(err);
+    } else {
+      const err = new Error(e.message);
+      if (e.status) {
+        err.status = e.status;
+      }
+      next(err);
+    }
   }
 };
