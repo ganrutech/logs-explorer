@@ -50,14 +50,16 @@ io.on("connection", (socket) => {
     socket.to(room).emit("receive", data);
   });
 
-  socket.on("info", (data) => {
+  socket.on("info", (room, data) => {
     logger.log({
       level: "info",
       message: data,
     });
+
+    socket.to(room).emit("receive", data);
   });
 
-  socket.on("error", (data) => {
+  socket.on("error", (room, data) => {
     logger.log({
       level: "error",
       message: data,
@@ -69,6 +71,8 @@ io.on("connection", (socket) => {
         },
       },
     });
+
+    socket.to(room).emit("receive", data);
   });
 });
 

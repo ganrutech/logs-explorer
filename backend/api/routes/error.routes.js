@@ -1,9 +1,10 @@
 const router = require("express").Router();
-const Error_Log = require("../models/error.model");
+const {
+  getAllError,
+  getError,
+} = require("../controllers/logs/error.controller");
 
-router.get("/", async (req, res, next) => {
-  const data = await Error_Log.find({});
-  res.status(200).json({ data: data });
-});
+router.get("/", getAllError);
+router.get("/:id", getError);
 
 module.exports = router;
