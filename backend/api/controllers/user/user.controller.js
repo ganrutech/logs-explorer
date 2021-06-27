@@ -8,26 +8,26 @@ const {
 } = require("../../helpers/query.helper");
 
 // Get all users
-exports.getAllUsers = (req, res, next) => {
+exports.getAllUsers = async (req, res, next) => {
   commonFilter(req, res, next, User);
 };
 
 // Get one user
-exports.getUser = (req, res, next) => {
+exports.getUser = async (req, res, next) => {
   commonFindByID(req, res, next, User);
 };
 
 // Create new user
-exports.createUser = (req, res, next) => {
+exports.createUser = async (req, res, next) => {
   commonSave(req, res, next, User);
 };
 
 // Update user
-exports.updateUser = (req, res, next) => {
+exports.updateUser = async (req, res, next) => {
   commonUpdate(req, res, next, User);
 };
 
 // Delete user
-exports.deleteUser = (req, res, next) => {
+exports.deleteUser = async (req, res, next) => {
   commonDeleteByID(req, res, next, User);
 };

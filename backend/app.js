@@ -1,9 +1,9 @@
-const dotenv = require("dotenv");
-dotenv.config();
 const cors = require("cors");
 const express = require("express");
-const db = require("mongoose");
-const { db_url } = require("./api/config/mongo.config");
+const createError = require("http-errors");
+require("dotenv").config();
+require("./api/helpers/init_mongodb");
+const logger = require("./api/middlewares/logger/index");
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -16,25 +16,9 @@ const io = require("socket.io")(server, {
 
 app.use(cors());
 app.use(express.json());
-
-db.Promise = global.Promise;
-
-db.connect(db_url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000,
-  useCreateIndex: true,
-  useFindAndModify: false,
-})
-  .then(() => {
-    console.log("Database Connection Success!!");
-    server.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
-  })
-  .catch((err) => console.log("Database Connection Error", err.message));
+app.use(express.urlencoded({ extended: true }));
 
 /** Logger - Start */
-
-const logger = require("./api/middlewares/logger");
 
 io.on("connection", (socket) => {
   // logger.info("Hello World", { id: socket.id });
@@ -51,28 +35,30 @@ io.on("connection", (socket) => {
   });
 
   socket.on("info", (room, data) => {
-    logger.log({
+    const resData = {
       level: "info",
-      message: data,
-    });
+      message: data.message,
+      meta: data.meta,
+    };
 
-    socket.to(room).emit("receive", data);
+    const timestamp = new Date().toISOString();
+    logger.log(resData);
+
+    socket.to(room).emit("receive", { ...resData, timestamp });
   });
 
   socket.on("error", (room, data) => {
-    logger.log({
+    const resData = {
       level: "error",
-      message: data,
+      message: data.message,
+      meta: data.meta,
       private: true,
-      meta: {
-        response: "Test Meta",
-        error: {
-          message: "404 Not found",
-        },
-      },
-    });
+    };
 
-    socket.to(room).emit("receive", data);
+    const timestamp = new Date().toISOString();
+    logger.log(resData);
+
+    socket.to(room).emit("receive", { ...resData, timestamp });
   });
 });
 
@@ -86,20 +72,21 @@ app.use("/api/v1/server/status", (req, res, next) => {
 });
 
 /** Services */
-const userRoute = require("./api/routes/user.routes");
-app.use("/api/v1/user", userRoute);
+const authRoutes = require("./api/routes/Auth.routes");
+app.use("/api/v1/auth", authRoutes);
 
-const errorRoute = require("./api/routes/error.routes");
-app.use("/api/v1/log/error", errorRoute);
+const userRoutes = require("./api/routes/user.routes");
+app.use("/api/v1/user", userRoutes);
 
-const infoRoute = require("./api/routes/info.routes");
-app.use("/api/v1/log/info", infoRoute);
+const errorRoutes = require("./api/routes/error.routes");
+app.use("/api/v1/log/error", errorRoutes);
+
+const infoRoutes = require("./api/routes/info.routes");
+app.use("/api/v1/log/info", infoRoutes);
 
 /** Error Middleware */
 app.use((req, res, next) => {
-  const err = new Error("Not found");
-  err.status = 404;
-  next(err);
+  next(createError.NotFound());
 });
 
 /** Error Handler */
@@ -122,3 +109,5 @@ app.use((err, req, res, next) => {
     },
   });
 });
+
+server.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));

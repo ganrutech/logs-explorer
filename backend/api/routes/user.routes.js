@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { verifyAccessToken } = require("../helpers/jwt_helper");
 
 const {
   getAllUsers,
@@ -8,7 +9,7 @@ const {
   deleteUser,
 } = require("../controllers/user/user.controller");
 
-router.get("/", getAllUsers);
+router.get("/", verifyAccessToken, getAllUsers);
 router.get("/:id", getUser);
 router.post("/", createUser);
 router.patch("/:id", updateUser);
