@@ -6,6 +6,10 @@ services:
     env_file:
       - ./env/mongo.env
 
+  elasticsearch:
+    volumes:
+      - elasticsearch-data-volume:/usr/share/elasticsearch/data
+
   logs-backend:
     build:
       context: ./backend
@@ -20,3 +24,4 @@ services:
 
 volumes:
   database-logs-prod:
+  elasticsearch-data-volume:
