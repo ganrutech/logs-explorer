@@ -52,30 +52,24 @@ Sample Example Log Schema Client:
         "method": "GET",
         "headers": {
           "host": "localhost",
-          "accepts": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-          "content-type": null,
+          "accepts": "*",
+          "content-type": "application/json",
           "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
         },
-        "query": {
-
-        },
-        "body": {
-
-        }
+        "query": {},
+        "body": {}
       },
       "response": {
         "status_code": 200,
         "headers": {
-          "accepts": null,
           "content-type": "application/json",
-          "user-agent": "744399f4-f294-461a-a5f3-5f6a9f03ecba"
+          "x-correlation-id": "744399f4-f294-461a-a5f3-5f6a9f03ecba"
         },
         "body": {
-          "item_id": 23,
-          "query": null
+          "status": "success",
+          "data": {"id": 1, "name": "jack"}
         }
       }
-    },
-    "x-correlation-id": "744399f4-f294-461a-a5f3-5f6a9f03ecba"
+    }
   }
 } -->
