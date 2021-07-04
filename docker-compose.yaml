@@ -10,6 +10,10 @@ services:
     image: elasticsearch:7.13.2
     container_name: "elasticsearch"
     restart: always
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ELK_AUTH_PASSWORD}
     ulimits:
       memlock:
         soft: -1
@@ -26,6 +30,10 @@ services:
     image: kibana:7.13.2
     container_name: "kibana"
     restart: always
+    environment:
+      - ELASTICSEARCH_HOSTS=${ELK_HOST}
+      - ELASTICSEARCH_USERNAME=${ELK_AUTH_USER}
+      - ELASTICSEARCH_PASSWORD=${ELK_AUTH_PASSWORD}
     ports:
       - "5601:5601"
     depends_on:

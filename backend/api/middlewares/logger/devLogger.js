@@ -14,7 +14,7 @@ const ignorePrivate = format((info) => {
 // Filetransport
 var fileTransport = new transports.DailyRotateFile({
   dirname: "logs",
-  filename: "logs-%DATE%.log",
+  filename: `${process.env.ELK_INDEX_DEV}-logs-%DATE%.log`,
   datePattern: "YYYY-MM-DD",
   maxFiles: "1d",
 });
@@ -22,7 +22,11 @@ var fileTransport = new transports.DailyRotateFile({
 const esTransportOpts = {
   level: "info",
   clientOpts: {
-    node: `http://elasticsearch:9200`,
+    node: process.env.ELK_HOST,
+    auth: {
+      username: process.env.ELK_AUTH_USER,
+      password: process.env.ELK_AUTH_PASSWORD,
+    },
   },
   indexPrefix: process.env.ELK_INDEX_DEV,
 };

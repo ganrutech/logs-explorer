@@ -1,47 +1,81 @@
+=================== Docker compose Up/Down ====================
+
 UP:
 docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d --build
 docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --build
 
 DOWN:
 docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml down
+docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml down
+
+=================== Environment Variables ====================
+Root
+File name: .env
+ELK_HOST=
+ELK_AUTH_USER=
+ELK_AUTH_PASSWORD=
+
+Folder: env/
+File name: mongo.env
+
+MONGO_INITDB_ROOT_USERNAME=
+MONGO_INITDB_ROOT_PASSWORD=
+MONGO_PORT=
+MONGO_DB=
+
+File name: service.env
+
+MONGO_INITDB_ROOT_USERNAME=
+MONGO_INITDB_ROOT_PASSWORD=
+MONGO_PORT=
+PORT=
+MONGO_DB=
+
+JWT_TOKEN_SECRET=
+JWT_REFRESH_SECRET=
+
+ELK_INDEX_DEV=
+ELK_INDEX_PROD=
+
+=================== Sample Schema ====================
 
 Sample Example Log Schema Client:
 
 <!-- {
+  "meta": {
     "http": {
       "url": {
-        "host": "localhost:3200",
-        "path": "/admin"
+        "host": "localhost",
+        "path": "/items/23"
       },
       "request": {
         "method": "GET",
         "headers": {
-          "host": "localhost:3200",
-          "accepts": "*/*",
-          "content-type": "application/json",
-          "user-agent": "PostmanRuntime/7.28.1"
+          "host": "localhost",
+          "accepts": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+          "content-type": null,
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
         },
         "query": {
 
         },
         "body": {
-          "name": "test-user"
+
         }
       },
       "response": {
-        "status_code": 404,
+        "status_code": 200,
         "headers": {
-          "x-powered-by": "Ganrutech",
-          "x-response-time": "1ms",
-          "x-correlation-id": "6904333b-cfc4-401a-a5d8-ff03d0b8c5c9",
-          "content-type": "application/json; charset=utf-8"
+          "accepts": null,
+          "content-type": "application/json",
+          "user-agent": "744399f4-f294-461a-a5f3-5f6a9f03ecba"
         },
         "body": {
-          "error": {
-            "code": 404,
-            "message": "Not found"
-          }
+          "item_id": 23,
+          "query": null
         }
       }
-    }
-  } -->
+    },
+    "x-correlation-id": "744399f4-f294-461a-a5f3-5f6a9f03ecba"
+  }
+} -->
