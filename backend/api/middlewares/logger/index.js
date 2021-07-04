@@ -9,4 +9,8 @@ if (process.env.NODE_ENV === "development") {
   logger = prodLogger();
 }
 
+logger.on("error", (error) => {
+  console.error("Error caught", error);
+});
+
 module.exports = logger;

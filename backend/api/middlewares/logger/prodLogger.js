@@ -1,5 +1,7 @@
 const { createLogger, format, transports } = require("winston");
 const { timestamp, json } = format;
+require("winston-daily-rotate-file");
+const { ElasticsearchTransport } = require("winston-elasticsearch");
 
 require("winston-mongodb");
 const { db_url } = require("../../config/mongo.config");
@@ -11,9 +13,30 @@ const ignorePrivate = format((info) => {
   return info;
 });
 
+// Filetransport
+var fileTransport = new transports.DailyRotateFile({
+  dirname: "logs",
+  filename: "logs-%DATE%.log",
+  datePattern: "YYYY-MM-DD",
+  maxFiles: "1d",
+});
+
+const esTransportOpts = {
+  level: "info",
+  clientOpts: {
+    node: `http://elasticsearch:9200`,
+  },
+  indexPrefix: process.env.ELK_INDEX_PROD,
+};
+
+const esTransport = new ElasticsearchTransport(esTransportOpts);
+
 function prodLogger() {
   return createLogger({
     transports: [
+      fileTransport,
+      esTransport,
+
       new transports.MongoDB({
         level: "info",
         db: db_url,

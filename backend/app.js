@@ -23,45 +23,57 @@ app.use(express.urlencoded({ extended: true }));
 io.on("connection", (socket) => {
   // logger.info("Hello World", { id: socket.id });
   socket.on("join-room", (room) => {
+    // console.log(room);
     socket.join(room);
   });
 
   socket.on("message", (room, data) => {
-    logger.log({
-      level: "info",
-      message: data,
-    });
-    socket.to(room).emit("receive", data);
+    try {
+      logger.log({
+        level: "info",
+        message: data,
+      });
+      socket.to(room).emit("receive", data);
+    } catch (error) {
+      console.log(error.message);
+    }
   });
 
-  socket.on("info", (room, data) => {
-    const resData = {
-      level: "info",
-      message: data.message,
-      meta: data.meta,
-    };
+  socket.on("info", (params) => {
+    try {
+      const timestamp = new Date().toISOString();
 
-    const timestamp = new Date().toISOString();
-    logger.log(resData);
+      const resData = {
+        level: "info",
+        message: params.data.message,
+        meta: params.data.meta,
+      };
 
-    socket.to(room).emit("receive", { ...resData, timestamp });
+      logger.log(resData);
+      socket.to(params.room).emit("receive", { ...resData, timestamp });
+    } catch (error) {
+      console.log(error.message);
+    }
   });
 
-  socket.on("error", (room, data) => {
-    const resData = {
-      level: "error",
-      message: data.message,
-      meta: data.meta,
-      private: true,
-    };
+  socket.on("error", (params) => {
+    try {
+      const resData = {
+        level: "error",
+        message: params.data.message,
+        meta: params.data.meta,
+        private: true,
+      };
 
-    const timestamp = new Date().toISOString();
-    logger.log(resData);
+      const timestamp = new Date().toISOString();
+      logger.log(resData);
 
-    socket.to(room).emit("receive", { ...resData, timestamp });
+      socket.to(params.room).emit("receive", { ...resData, timestamp });
+    } catch (error) {
+      console.log(error.message);
+    }
   });
 });
-
 /** Logger - End */
 
 // Test Endpoint

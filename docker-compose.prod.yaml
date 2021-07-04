@@ -9,6 +9,12 @@ services:
   elasticsearch:
     volumes:
       - elasticsearch-data-volume:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+
+  kibana:
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
 
   logs-backend:
     build:
